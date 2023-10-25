@@ -47,7 +47,7 @@
       </thead>
       <tbody v-for="(stud, index) in students" :key="index">
         <td>
-          <a @click="openModal(stud)">
+          <a>
             <img v-if="stud.photo" :src="stud.photo" alt="photo" width="50" />
           </a>
         </td>
@@ -102,27 +102,13 @@
     />
     <button class="inputEdit" @click="saveChanges()">Safe changes</button>
   </div>
-
-  <button @click="isOpen = true">Show Modal</button>
-
-  <Modal :open="isOpen" @close="isOpen = !isOpen">
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. In repudiandae
-      enim voluptas assumenda possimus deserunt quia autem debitis unde labore
-      illo inventore ex minima voluptatibus porro perferendis, ipsa totam sint!
-    </p>
-  </Modal>
 </template>
 
 <script>
 import axios from "axios";
-import Modal from "./Modal.vue";
-import { ref } from "vue";
 
 export default {
-  setup() {
-    const isOpen = ref(false);
-
+  data() {
     return {
       students: [],
       searchName: "",
@@ -135,8 +121,6 @@ export default {
         photo: "",
       },
       selectedStudent: null,
-      components: { Modal },
-      isOpen,
     };
   },
 

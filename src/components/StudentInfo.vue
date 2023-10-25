@@ -1,22 +1,22 @@
 <template>
   <div class="wrapper">
-    <div class="photo">
-      {{ student.photo }}
+    <div class="student-info">
+      <img :src="student.photo" :alt="student.name" class="student-photo" />
     </div>
     <div class="info">
       <h2>{{ student.name }}</h2>
-      <p>
+      <h3>
         {{ student.group }}
-      </p>
-      <p>
+      </h3>
+      <h3>
         Grade:
         {{ student.mark }}
-      </p>
+      </h3>
       <div v-if="student.isDonePr === true">
-        <p>Practice DONE</p>
+        <h3>Practice DONE</h3>
       </div>
       <div v-else>
-        <p>Practice FAILED</p>
+        <h3>Practice FAILED</h3>
       </div>
     </div>
   </div>
@@ -48,7 +48,11 @@ export default {
   display: flex;
   align-items: center;
 }
-.photo {
+.student-info {
+  flex: 1;
+  text-align: center;
+}
+.student-info img {
   max-width: 200px;
   border: 2px solid #ccc;
   border-radius: 10px;
