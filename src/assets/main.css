@@ -36,6 +36,11 @@ h1 {
   margin-right: 5px;
   background-color: white;
 }
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
 a,
 .green {
   text-decoration: none;
@@ -64,11 +69,6 @@ td {
   text-align: center;
 }
 
-/* Стили для выделенных ячеек */
-.red {
-  color: red;
-}
-
 /* Стили для ссылок в ячейках */
 td a {
   text-decoration: none;
@@ -87,30 +87,21 @@ td img {
   height: auto;
   border-radius: 50%;
 }
-
-/* Стили для чекбокса */
-input[type="checkbox"] {
-  transform: scale(1.5);
-  cursor: pointer;
-  justify-content: center;
-}
-
 /* Стили для иконок редактирования */
 td a.edit-icon {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: url("../assets/icons-edit.png") no-repeat center center;
+  background: url("../assets/iconsEdit.png") no-repeat center center;
   background-size: cover;
   margin-right: 10px;
 }
 
-/* Стили для ячеек с кнопкой удаления */
-td .delete-btn {
-  color: #ff0000;
-  cursor: pointer;
+.addStudent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);

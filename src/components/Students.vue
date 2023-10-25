@@ -7,9 +7,9 @@
         <tr>
           <th>Photo</th>
           <th>Name</th>
+          <th>Work Done</th>
           <th>Group</th>
           <th>Grade</th>
-          <th>Work Done</th>
         </tr>
       </thead>
       <tbody v-for="(stud, index) in students" :key="index">
@@ -29,8 +29,10 @@
         <td>{{ stud.group }}</td>
         <td>{{ stud.grade }}</td>
         <td>
-          <a @click="editStudent(stud._id)" href="../assets/icons-edit.png"></a>
           <a @click="deleteStudent(stud._id)">Delete</a>
+        </td>
+        <td>
+          <a class="edit-icon" @click="editStudent(stud._id)"> </a>
         </td>
       </tbody>
     </table>
