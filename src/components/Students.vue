@@ -6,8 +6,14 @@
     </div>
 
     <div class="addStudent">
+      <input
+        type="url"
+        class="input"
+        v-model="newStudent.photo"
+        placeholder="Фото"
+      />
       <input class="input" placeholder="add name" v-model="newStudent.name" />
-      <input class="input" v-model="newStudent.workDone" type="checkbox" />
+      <input class="input" v-model="newStudent.isDonePr" type="checkbox" />
       <select
         class="input"
         v-model="newStudent.group"
@@ -22,7 +28,7 @@
       </select>
       <input
         class="input"
-        v-model="newStudent.grade"
+        v-model="newStudent.mark"
         type="number"
         placeholder="grade"
       />
@@ -40,17 +46,21 @@
         </tr>
       </thead>
       <tbody v-for="(stud, index) in students" :key="index">
-        <td>photo</td>
-        <td :class="{ red: stud.highlighted }">
+        <td>
+          <a @click="openModal(stud)">
+            <img v-if="stud.photo" :src="stud.photo" alt="photo" width="50" />
+          </a>
+        </td>
+        <td>
           <router-link v-bind:to="'/student-info/' + stud._id">
             {{ stud.name }}
           </router-link>
         </td>
         <td>
-          <input class="input" type="checkbox" v-model="stud.workDone" />
+          <input class="input" type="checkbox" v-model="stud.isDonePr" />
         </td>
         <td>{{ stud.group }}</td>
-        <td>{{ stud.grade }}</td>
+        <td>{{ stud.mark }}</td>
         <td>
           <a @click="deleteStudent(stud._id)">Delete</a>
         </td>
@@ -69,7 +79,7 @@
     />
     <input
       class="inputEdit"
-      v-model="selectedStudent.workDone"
+      v-model="selectedStudent.isDonePr"
       type="checkbox"
     />
     <select
@@ -86,33 +96,50 @@
     </select>
     <input
       class="inputEdit"
-      v-model="selectedStudent.grade"
+      v-model="selectedStudent.mark"
       type="number"
       placeholder="grade"
     />
     <button class="inputEdit" @click="saveChanges()">Safe changes</button>
   </div>
+
+  <button @click="isOpen = true">Show Modal</button>
+
+  <Modal :open="isOpen" @close="isOpen = !isOpen">
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. In repudiandae
+      enim voluptas assumenda possimus deserunt quia autem debitis unde labore
+      illo inventore ex minima voluptatibus porro perferendis, ipsa totam sint!
+    </p>
+  </Modal>
 </template>
 
 <script>
 import axios from "axios";
+import Modal from "./Modal.vue";
+import { ref } from "vue";
 
 export default {
-  data() {
+  setup() {
+    const isOpen = ref(false);
+
     return {
       students: [],
       searchName: "",
       newStudent: {
         id: "",
         name: "",
-        workDone: false,
-        grade: "",
+        isDonePr: false,
+        mark: "",
         group: "",
         photo: "",
       },
       selectedStudent: null,
+      components: { Modal },
+      isOpen,
     };
   },
+
   mounted() {
     axios.get("http://34.82.81.113:3000/students").then((data) => {
       this.students = data.data;
@@ -137,9 +164,9 @@ export default {
         });
 
       this.newStudent.name = "";
-      this.newStudent.workDone = false;
+      this.newStudent.isDonePr = false;
       this.newStudent.group = "";
-      this.newStudent.grade = "";
+      this.newStudent.mark = "";
     },
     selectStudent(stud) {
       this.selectedStudent = { ...stud }; //new copy of selected student
