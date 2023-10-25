@@ -1,5 +1,7 @@
 @import "./base.css";
-
+.highlighted {
+  color: #e44d26 !important;
+}
 #app {
   min-height: 100%;
   display: flex;
@@ -102,6 +104,31 @@ td a.edit-icon {
   align-items: center;
   gap: 10px;
 }
+.serchName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+}
+.serchName input {
+  height: 30px;
+  margin: 0;
+}
+.editStudentBlock {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.inputEdit {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+  background-color: white;
+  border: 2px solid #800000;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
