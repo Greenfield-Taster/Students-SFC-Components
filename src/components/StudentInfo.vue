@@ -43,27 +43,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.wrapper {
-  display: flex;
-  align-items: center;
-}
-.student-info {
-  flex: 1;
-  text-align: center;
-}
-.student-info img {
-  max-width: 200px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-}
-.info {
-  flex: 1;
-  text-align: left;
-  margin-left: 20px;
-  color: #008000;
-}
-h2 {
-  color: #008000;
-}
-</style>

@@ -47,8 +47,14 @@
       </thead>
       <tbody v-for="(stud, index) in students" :key="index">
         <td>
-          <a>
-            <img v-if="stud.photo" :src="stud.photo" alt="photo" width="50" />
+          <a @click="modalStudent(stud)">
+            <img
+              @click="isOpen = true"
+              v-if="stud.photo"
+              :src="stud.photo"
+              alt="photo"
+              width="50"
+            />
           </a>
         </td>
         <td>
@@ -102,12 +108,46 @@
     />
     <button class="inputEdit" @click="saveChanges()">Safe changes</button>
   </div>
+
+  <Modal :open="isOpen" @close="isOpen = !isOpen">
+    <div v-if="modalStudentInfo">
+      <div class="wrapper">
+        <div class="student-info">
+          <img
+            :src="modalStudentInfo.photo"
+            :alt="modalStudentInfo.name"
+            class="student-photo"
+          />
+        </div>
+        <div class="info">
+          <h2>{{ modalStudentInfo.name }}</h2>
+          <h3>
+            {{ modalStudentInfo.group }}
+          </h3>
+          <h3>
+            Grade:
+            {{ modalStudentInfo.mark }}
+          </h3>
+          <div v-if="modalStudentInfo.isDonePr === true">
+            <h3>Practice DONE</h3>
+          </div>
+          <div v-else>
+            <h3>Practice FAILED</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Modal>
 </template>
 
 <script>
 import axios from "axios";
+import Modal from "./Modal.vue";
 
 export default {
+  components: {
+    Modal,
+  },
   data() {
     return {
       students: [],
@@ -121,6 +161,8 @@ export default {
         photo: "",
       },
       selectedStudent: null,
+      modalStudentInfo: null,
+      isOpen: false,
     };
   },
 
@@ -154,6 +196,9 @@ export default {
     },
     selectStudent(stud) {
       this.selectedStudent = { ...stud }; //new copy of selected student
+    },
+    modalStudent(stud) {
+      this.modalStudentInfo = { ...stud }; //new copy of selected student
     },
     saveChanges() {
       axios
