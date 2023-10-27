@@ -34,7 +34,7 @@
       />
       <button class="input" @click="addStudent()">Add student</button>
     </div>
-
+    <p>Кількість {{ studentsNumber }}</p>
     <table>
       <thead>
         <tr>
@@ -169,6 +169,7 @@ export default {
   mounted() {
     axios.get("http://34.82.81.113:3000/students").then((data) => {
       this.students = data.data;
+      this.$store.commit("setCount", this.students.length);
     });
   },
   methods: {
@@ -179,6 +180,7 @@ export default {
         if (index !== -1) {
           this.students.splice(index, 1);
         }
+        this.$store.commit("setCount", this.students.lenght);
       });
     },
     addStudent() {
@@ -187,6 +189,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.students.push(response.data);
+          this.$store.commit("setCount", this.studentslenght);
         });
 
       this.newStudent.name = "";
@@ -225,6 +228,9 @@ export default {
       return students.value.filter((student) =>
         student.name.toLowerCase().includes(searchQuery)
       );
+    },
+    studentsNumber: function () {
+      return this.$store.getters.getCount;
     },
   },
 };
