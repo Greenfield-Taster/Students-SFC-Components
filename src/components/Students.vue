@@ -1,5 +1,27 @@
 <template>
-  <div>
+  <div :class="styleSwitcher">
+    <div>
+      <input
+        @change="changeTheme"
+        type="radio"
+        name="drone"
+        value="light"
+        v-model="selectedTheme"
+      />
+      <label> light</label>
+    </div>
+
+    <div>
+      <input
+        @change="changeTheme"
+        type="radio"
+        name="drone"
+        value="dark"
+        v-model="selectedTheme"
+      />
+      <label> dark</label>
+    </div>
+
     <div class="serchName">
       <h1>Searching</h1>
       <input class="input" placeholder="type name" v-model="searchName" />
@@ -140,98 +162,146 @@
   </Modal>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
+import { useStore } from "vuex";
 import Modal from "./Modal.vue";
 
-export default {
-  components: {
-    Modal,
-  },
-  data() {
-    return {
-      students: [],
-      searchName: "",
-      newStudent: {
-        id: "",
-        name: "",
-        isDonePr: false,
-        mark: "",
-        group: "",
-        photo: "",
-      },
-      selectedStudent: null,
-      modalStudentInfo: null,
-      isOpen: false,
-    };
-  },
+const students = ref([]);
+const searchName = ref("");
+const newStudent = ref({
+  id: "",
+  name: "",
+  isDonePr: false,
+  mark: "",
+  group: "",
+  photo: "",
+});
+const selectedStudent = ref(null);
+const modalStudentInfo = ref(null);
+const isOpen = ref(false);
+const store = useStore();
 
-  mounted() {
-    axios.get("http://34.82.81.113:3000/students").then((data) => {
-      this.students = data.data;
-      this.$store.commit("setCount", this.students.length);
-    });
-  },
-  methods: {
-    deleteStudent(id) {
-      axios.delete(`http://34.82.81.113:3000/students/${id}`).then((data) => {
-        console.log(data);
-        const index = this.students.findIndex((stud) => stud._id === id);
-        if (index !== -1) {
-          this.students.splice(index, 1);
-        }
-        this.$store.commit("setCount", this.students.lenght);
-      });
-    },
-    addStudent() {
-      axios
-        .post("http://34.82.81.113:3000/students", this.newStudent)
-        .then((response) => {
-          console.log(response.data);
-          this.students.push(response.data);
-          this.$store.commit("setCount", this.studentslenght);
-        });
+const storeStyle = useStore();
+const selectedTheme = ref("dark");
 
-      this.newStudent.name = "";
-      this.newStudent.isDonePr = false;
-      this.newStudent.group = "";
-      this.newStudent.mark = "";
-    },
-    selectStudent(stud) {
-      this.selectedStudent = { ...stud }; //new copy of selected student
-    },
-    modalStudent(stud) {
-      this.modalStudentInfo = { ...stud }; //new copy of selected student
-    },
-    saveChanges() {
-      axios
-        .put(
-          `http://34.82.81.113:3000/students/${this.selectedStudent._id}`,
-          this.selectedStudent
-        )
-        .then((response) => {
-          console.log("Data changed:", response.data);
+onMounted(() => {
+  axios.get("http://34.82.81.113:3000/students").then((response) => {
+    students.value = response.data;
+    store.commit("setCount", students.value.length);
+  });
+});
 
-          const index = this.students.findIndex(
-            (stud) => stud._id === this.selectedStudent._id
-          );
-          if (index !== -1) {
-            this.students[index] = { ...this.selectedStudent };
-          }
-          this.selectedStudent = null;
-        });
-    },
-  },
-  computed: {
-    filteredStudents: function () {
-      const searchQuery = searchName.value.toLowerCase();
-      return students.value.filter((student) =>
-        student.name.toLowerCase().includes(searchQuery)
-      );
-    },
-    studentsNumber: function () {
-      return this.$store.getters.getCount;
-    },
-  },
+const deleteStudent = (id) => {
+  axios.delete(`http://34.82.81.113:3000/students/${id}`).then((response) => {
+    console.log(response);
+    const index = students.value.findIndex((stud) => stud._id === id);
+    if (index !== -1) {
+      students.value.splice(index, 1);
+    }
+    store.commit("setCount", students.value.length);
+  });
 };
+
+const addStudent = () => {
+  axios
+    .post("http://34.82.81.113:3000/students", newStudent.value)
+    .then((response) => {
+      console.log(response.data);
+      students.value.push(response.data);
+      store.commit("setCount", students.value.length);
+    });
+
+  newStudent.value.name = "";
+  newStudent.value.isDonePr = false;
+  newStudent.value.group = "";
+  newStudent.value.mark = "";
+};
+
+const selectStudent = (stud) => {
+  selectedStudent.value = { ...stud };
+};
+
+const modalStudent = (stud) => {
+  modalStudentInfo.value = { ...stud };
+};
+const changeTheme = () => {
+  storeStyle.commit("setStyle", selectedTheme.value);
+};
+
+const styleSwitcher = computed(() => {
+  return storeStyle.getters.getStyle;
+});
+
+const studentsNumber = computed(() => {
+  return store.getters.getCount;
+});
+
+const saveChanges = () => {
+  axios
+    .put(
+      `http://34.82.81.113:3000/students/${selectedStudent.value._id}`,
+      selectedStudent.value
+    )
+    .then((response) => {
+      console.log("Data changed:", response.data);
+
+      const index = students.value.findIndex(
+        (stud) => stud._id === selectedStudent.value._id
+      );
+      if (index !== -1) {
+        students.value[index] = { ...selectedStudent.value };
+      }
+      selectedStudent.value = null;
+    });
+};
+// const filteredStudents = computed(() => {
+//   const searchQuery = searchName.value.toLowerCase();
+//   return students.value.filter((student) =>
+//     student.name.toLowerCase().includes(searchQuery)
+//   );
+// });
 </script>
+<style scoped>
+.light {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 15px;
+}
+.dark {
+  background-color: #a7a7a7;
+  color: #ffffff;
+  padding: 15px;
+}
+.dark table {
+  background-color: #333; /* Цвет фона таблицы */
+  color: #fff; /* Цвет текста */
+}
+.dark th,
+td {
+  border-bottom: 1px solid #555; /* Цвет горизонтальных линий между ячейками */
+}
+.dark th {
+  background-color: #555; /* Цвет фона заголовка */
+}
+.dark tbody tr:nth-child(even) {
+  background-color: #444; /* Цвет фона четных строк */
+}
+.dark tbody tr:nth-child(odd) {
+  background-color: #333; /* Цвет фона нечетных строк */
+}
+.dark a {
+  color: #00f; /* Цвет ссылок */
+  text-decoration: none;
+}
+.dark a:hover {
+  text-decoration: underline; /* Подчеркивание ссылок при наведении */
+}
+.dark p {
+  color: #000000;
+}
+.dark h1 {
+  color: #000000;
+}
+</style>

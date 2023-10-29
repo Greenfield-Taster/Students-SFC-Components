@@ -2,21 +2,22 @@ import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 
 const state = {
-  count: 0,
-};
-
-const getters = {
-  getCount: (state) => state.count,
+  style: "dark",
 };
 
 const mutations = {
-  setCount(state, count) {
-    state.count = count;
+  setStyle(state, style) {
+    state.style = style;
   },
 };
+
+const getters = {
+  getStyle: (state) => state.style,
+};
+
 export default createStore({
-  plugins: [createPersistedState()],
   state,
   getters,
   mutations,
+  plugins: [createPersistedState()],
 });
