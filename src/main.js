@@ -6,7 +6,6 @@ import App from "./components/App.vue";
 import Students from "./components/Students.vue";
 import StudentInfo from "./components/StudentInfo.vue";
 import store from "./store.js";
-import storeStyle from "./storeStyle.js";
 
 const routes = [
   { path: "/", component: Students },
@@ -18,4 +17,4 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).use(store).use(storeStyle).mount("#app");
+createApp(App).use(router).use(store).mount("#app");

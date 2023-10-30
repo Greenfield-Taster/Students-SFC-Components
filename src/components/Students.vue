@@ -183,8 +183,7 @@ const modalStudentInfo = ref(null);
 const isOpen = ref(false);
 const store = useStore();
 
-const storeStyle = useStore();
-const selectedTheme = ref("dark");
+const selectedTheme = ref("light");
 
 onMounted(() => {
   axios.get("http://34.82.81.113:3000/students").then((response) => {
@@ -227,11 +226,11 @@ const modalStudent = (stud) => {
   modalStudentInfo.value = { ...stud };
 };
 const changeTheme = () => {
-  storeStyle.commit("setStyle", selectedTheme.value);
+  store.commit("setStyle", selectedTheme.value);
 };
 
 const styleSwitcher = computed(() => {
-  return storeStyle.getters.getStyle;
+  return store.getters.getStyle;
 });
 
 const studentsNumber = computed(() => {
