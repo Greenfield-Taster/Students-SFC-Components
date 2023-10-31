@@ -9,6 +9,7 @@
     "axios": "^1.5.1",
     "css-loader": "^6.8.1",
     "vue": "^3.3.4",
+    "vue-axios": "^3.5.2",
     "vue-loader": "^17.3.0",
     "vue-router": "^4.2.5",
     "vuex": "^4.1.0",

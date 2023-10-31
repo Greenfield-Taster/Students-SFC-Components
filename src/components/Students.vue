@@ -90,7 +90,12 @@
         <td>{{ stud.group }}</td>
         <td>{{ stud.mark }}</td>
         <td>
-          <a @click="deleteStudent(stud._id)">Delete</a>
+          <a
+            href="#"
+            @click="deleteStudent(stud._id)"
+            v-show="stud.group === getCurrentUser.group"
+            >Delete</a
+          >
         </td>
         <td>
           <a class="edit-icon" @click="selectStudent(stud)"></a>
@@ -255,6 +260,9 @@ const saveChanges = () => {
       selectedStudent.value = null;
     });
 };
+const getCurrentUser = computed(() => {
+  return store.getters.getUser;
+});
 // const filteredStudents = computed(() => {
 //   const searchQuery = searchName.value.toLowerCase();
 //   return students.value.filter((student) =>
